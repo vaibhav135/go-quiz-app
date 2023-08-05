@@ -4,7 +4,7 @@ tasks:
   build:
     desc: Build quiz app.
     cmds:
-      - go build -o bin/gopher-cli main.go 
+      - go build -o bin/quiz main.go 
   run:
     desc: Run quiz app.
     cmds:
