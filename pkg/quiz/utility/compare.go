@@ -3,7 +3,9 @@ package utility
 
 func Compare(element string, slice []string) bool {
   for _, i := range slice {
-    print(i)
+    if element == i {
+      return true
+    }
   } 
 
   return false
