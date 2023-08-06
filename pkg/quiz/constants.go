@@ -1,8 +1,6 @@
 package quiz
 
-type FileType string 
-
 const (
-  json FileType = "json"
-  csv  FileType = "csv"  
+  Json = "json"
+  Csv  = "csv"  
 )
