@@ -3,8 +3,11 @@ package quiz
 import (
 	"errors"
 	"fmt"
+	fp "path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/vaibhav135/go-quiz-app/pkg/quiz/database"
 	"github.com/vaibhav135/go-quiz-app/pkg/quiz/helpers"
 )
 
@@ -18,19 +21,38 @@ var addCmd = &cobra.Command{
     }
   
     filePath := args[0]
-    if !helpers.ValidateFileExtensions(filePath) {
+    var fileExtension = fp.Ext(filePath)
+    var fileExtensionType = strings.Split(fileExtension, ".")[1]
+
+    if fileExtensionType != fileType {
+      return fmt.Errorf("\n File extension type does not match type flag value.")
+    }
+    
+
+    if !helpers.ValidateFiletype(fileExtensionType)  {
       return errors.New("\n File extension type can either be .csv or .json")
     }
 
+
     return nil
-  } ,
+  },
 	RunE: func(cmd *cobra.Command, args []string) error{ 
-    fmt.Println(args)
-    fmt.Println(author, fileType)
 
     if !helpers.ValidateFiletype(fileType) {
       return fmt.Errorf("\nFiletype can only be csv or json\n")
     }
+
+    filePath := args[0]
+
+    quizContent, err := helpers.ParseFile(fileType, filePath)
+  
+    if err != nil {
+      return err
+    }
+
+    database.QuizInstance.Add(quizContent) 
+
+    fmt.Println(quizContent)
 
     return nil
   },
