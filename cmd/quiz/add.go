@@ -50,9 +50,7 @@ var addCmd = &cobra.Command{
       return err
     }
 
-    database.QuizInstance.Add(quizContent) 
-
-    fmt.Println(quizContent)
+    database.QuizInstance.BulkInsert(quizContent) 
 
     return nil
   },

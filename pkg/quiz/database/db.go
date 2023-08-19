@@ -2,77 +2,101 @@ package database
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"log"
+	"os"
 	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/vaibhav135/go-quiz-app/pkg/quiz"
 )
 
-
 type Quiz struct {
-  DB *sql.DB
+	DB *sql.DB
 }
 
 var QuizInstance *Quiz
-var dbFile = "../../../quiz.db"
+var dbFile = "quiz.db"
 var lock = &sync.Mutex{}
 
-func IntializeQuiz() (*Quiz, error){
+func IntializeQuiz() (*Quiz, error) {
 
-  lock.Lock()
-  defer lock.Unlock()
+	lock.Lock()
+	defer lock.Unlock()
 
-  if QuizInstance == nil {
-    db, err := sql.Open("sqlite3", dbFile)
+	if QuizInstance == nil {
+		db, err := create()
 
-    if err != nil {
-      return nil, err 
-    }
+		if err != nil {
+			log.Fatal(err)
+		}
 
-    if _, err := db.Exec(dbSeedQuery); err != nil {
-      return nil, err
-    }
+		QuizInstance = &Quiz{
+			DB: db,
+		}
 
-    QuizInstance = &Quiz{
-      DB: db,
-    }
+	} else {
+		log.Printf("Instance already created...")
+	}
 
-  }else{
-    log.Printf("Instance already created...")
-  }
+	return QuizInstance, nil
+}
 
-  return QuizInstance, nil
+func createFile() {
+	f, err := os.Create(dbFile)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+}
+
+func create() (*sql.DB, error) {
+	_, err := os.Stat(dbFile)
+
+	if errors.Is(err, os.ErrNotExist) {
+		createFile()
+	}
+
+	db, err := sql.Open("sqlite3", dbFile)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := db.Exec(dbSeedQuery); err != nil {
+		return nil, err
+	}
+
+	return db, err
+
 }
 
 func (quiz *Quiz) List(numberOfQuiz int) {
-
 }
 
+func (quiz *Quiz) BulkInsert(quizData []quiz.QuizContent) {
+	stmt, err := quiz.DB.Prepare(quizInsertQuery)
 
-func (quiz *Quiz) BulkInsert(data []quiz.QuizContent) {
+	if err != nil {
+		log.Fatal(err)
+	}
 
-  for _, question := range data{
-    err := quiz.Insert(question) 
-    if err != nil {
-      log.Fatal(err)
-    }
-  }
+	defer stmt.Close()
 
-  log.Println("\nData added successfully...")
-}
+	for _, data := range quizData {
+		_, err := stmt.Exec(data.Question, data.Answer)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
-func (quiz *Quiz) Insert(data quiz.QuizContent) error {
-  _, err := quiz.DB.Exec(quizInsertQuery, data.Question, data.Answer)
-
-  if err != nil {
-    return err
-  }
-
-  return nil
+	log.Println("\nData added successfully...")
 }
 
 func (quiz *Quiz) CloseConn() {
-  QuizInstance.DB.Close()
-  QuizInstance = nil
+	QuizInstance.DB.Close()
+	QuizInstance = nil
 }

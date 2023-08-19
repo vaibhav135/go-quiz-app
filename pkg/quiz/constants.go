@@ -7,5 +7,5 @@ const (
 
 type QuizContent struct {
   Question string `json:"question"`
-  Answer int `json:"answer"`
+  Answer string `json:"answer"`
 }
