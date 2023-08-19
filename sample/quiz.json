@@ -1,42 +1,42 @@
 [
   {
-    "question": "5+5",
-    "answer": 10
+    "question": "What is 5+5?",
+    "answer": "10"
   },
   {
-    "question": "10-3",
-    "answer": 7
+    "question": "What is 10-3?",
+    "answer": "7"
   },
   {
-    "question": "2*8",
-    "answer": 16
+    "question": "What is 2*8?",
+    "answer": "16"
   },
   {
-    "question": "15/3",
-    "answer": 5
+    "question": "What is 15/3?",
+    "answer": "5"
   },
   {
-    "question": "12+9",
-    "answer": 21
+    "question": "What is 12+9?",
+    "answer": "21"
   },
   {
-    "question": "7-4",
-    "answer": 3
+    "question": "What is 7-4?",
+    "answer": "3"
   },
   {
-    "question": "6*7",
-    "answer": 42
+    "question": "What is 6*7?",
+    "answer": "42"
   },
   {
-    "question": "20/2",
-    "answer": 10
+    "question": "What is 20/2?",
+    "answer": "10"
   },
   {
-    "question": "11+13",
-    "answer": 24
+    "question": "What is 11+13?",
+    "answer": "24"
   },
   {
-    "question": "15-9",
-    "answer": 6
+    "question": "What is 15-9?",
+    "answer": "6"
   }
 ]
