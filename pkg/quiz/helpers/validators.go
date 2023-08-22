@@ -6,12 +6,7 @@ import (
 )
 
 func ValidateFiletype(fileType string) bool {
-  var fileTypes = []string {quiz.Json, quiz.Csv} 
+	var fileTypes = []string{quiz.Json, quiz.Csv}
 
-  if utility.Compare(fileType, fileTypes) {
-    return true
-  }
-
-  return false 
+	return utility.Compare(fileType, fileTypes)
 }
-
