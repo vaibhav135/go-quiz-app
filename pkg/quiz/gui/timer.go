@@ -17,7 +17,7 @@ var (
 
 var duration int
 var prevElapsed = 0
-var	start = time.Now()
+var start = time.Now()
 
 func printRemainingTime(elapsed int) string {
 	timeRemaining := duration - elapsed
@@ -27,7 +27,7 @@ func printRemainingTime(elapsed int) string {
 }
 
 func drawTime(screen tcell.Screen, x int, y int, width int, height int) (int, int, int, int) {
-  elapsed := int(time.Now().Sub(start).Seconds())
+	elapsed := int(time.Since(start).Seconds())
 	if elapsed != prevElapsed {
 		prevElapsed = elapsed
 	}
@@ -43,10 +43,8 @@ func drawTime(screen tcell.Screen, x int, y int, width int, height int) (int, in
 func refresh() {
 	tick := time.NewTicker(refreshInterval)
 	for {
-		select {
-		case <-tick.C:
-			app.Draw()
-		}
+		<-tick.C
+		app.Draw()
 	}
 }
 
