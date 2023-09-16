@@ -28,7 +28,6 @@ func IntializeQuiz() *Quiz {
 		db, err := create()
 
 		if err != nil {
-			log.Fatal(err)
 			log.Panic(err)
 		}
 
@@ -81,7 +80,6 @@ func (quiz *Quiz) BulkInsert(quizData []quiz.QuizContent) {
 	stmt, err := quiz.DB.Prepare(quizInsertQuery)
 
 	if err != nil {
-		log.Fatal(err)
 		log.Panic(err)
 	}
 
@@ -90,7 +88,6 @@ func (quiz *Quiz) BulkInsert(quizData []quiz.QuizContent) {
 	for _, data := range quizData {
 		_, err := stmt.Exec(data.Question, data.Answer)
 		if err != nil {
-			log.Fatal(err)
 			log.Panic(err)
 		}
 	}
