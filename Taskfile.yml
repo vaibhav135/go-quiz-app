@@ -9,4 +9,12 @@ tasks:
     desc: Run quiz app.
     cmds:
       - go run main.go
+  clean:
+    desc: Run go mod clean.
+    cmds:
+      - go clean -modcache && go mod tidy
+  lint:
+    desc: Run golangci-lint.
+    cmds:
+      - go mod tidy && golangci-lint run
 

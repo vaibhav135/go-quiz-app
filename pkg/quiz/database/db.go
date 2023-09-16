@@ -19,7 +19,7 @@ var QuizInstance *Quiz
 var dbFile = "quiz.db"
 var lock = &sync.Mutex{}
 
-func IntializeQuiz() (*Quiz, error) {
+func IntializeQuiz() *Quiz {
 
 	lock.Lock()
 	defer lock.Unlock()
@@ -29,6 +29,7 @@ func IntializeQuiz() (*Quiz, error) {
 
 		if err != nil {
 			log.Fatal(err)
+			log.Panic(err)
 		}
 
 		QuizInstance = &Quiz{
@@ -39,7 +40,7 @@ func IntializeQuiz() (*Quiz, error) {
 		log.Printf("Instance already created...")
 	}
 
-	return QuizInstance, nil
+	return QuizInstance
 }
 
 func createFile() {
@@ -81,6 +82,7 @@ func (quiz *Quiz) BulkInsert(quizData []quiz.QuizContent) {
 
 	if err != nil {
 		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	defer stmt.Close()
@@ -89,6 +91,7 @@ func (quiz *Quiz) BulkInsert(quizData []quiz.QuizContent) {
 		_, err := stmt.Exec(data.Question, data.Answer)
 		if err != nil {
 			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 
