@@ -48,14 +48,12 @@ func refresh() {
 	}
 }
 
-func Timer(durationArg int) {
+func timer(durationArg int) tview.Primitive {
 	duration = durationArg
 
-	app = tview.NewApplication()
 	view = tview.NewBox().SetDrawFunc(drawTime)
 
 	go refresh()
-	if err := app.SetRoot(view, true).Run(); err != nil {
-		panic(err)
-	}
+
+	return view
 }

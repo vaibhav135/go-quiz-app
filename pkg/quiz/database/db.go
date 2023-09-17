@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/vaibhav135/go-quiz-app/pkg/quiz"
+	TQuiz "github.com/vaibhav135/go-quiz-app/pkg/quiz"
 )
 
 type Quiz struct {
@@ -73,10 +73,30 @@ func create() (*sql.DB, error) {
 
 }
 
-func (quiz *Quiz) List(numberOfQuiz int) {
+func (quiz *Quiz) List(numberOfQuiz int) []TQuiz.QuizContent {
+	rows, err := quiz.DB.Query(quizListQuery, numberOfQuiz)
+
+	if err != nil {
+		log.Panic(err)
+	}
+
+	var quizContent = []TQuiz.QuizContent{}
+
+	for rows.Next() {
+		var (
+			Question string
+			Answer   string
+		)
+		if err := rows.Scan(&Question, &Answer); err != nil {
+			log.Fatal(err)
+		}
+		quizContent = append(quizContent, TQuiz.QuizContent{Question: Question, Answer: Answer})
+	}
+
+	return quizContent
 }
 
-func (quiz *Quiz) BulkInsert(quizData []quiz.QuizContent) {
+func (quiz *Quiz) BulkInsert(quizData []TQuiz.QuizContent) {
 	stmt, err := quiz.DB.Prepare(quizInsertQuery)
 
 	if err != nil {
